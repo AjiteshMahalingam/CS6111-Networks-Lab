@@ -9,3 +9,7 @@ https://dev.to/sanjayrv/a-beginners-guide-to-socket-programming-in-c-5an5 <br />
 
 ## Week 2 : Socket Programming 2
 Build a Chat application with single and multiple clients. <br />
+Single Client : <br />
+https://www.geeksforgeeks.org/tcp-server-client-implementation-in-c/ <br />
+Multi Client : <br />
+https://medium.com/@securosoft/simple-chat-server-using-sockets-in-c-f72fc8b5b24e <br />
