@@ -2,4 +2,4 @@
 
 ## Week 1 : Socket Programming 1
 
-## Week 2 : Socket Programming
+## Week 2 : Socket Programming 2
