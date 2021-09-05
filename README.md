@@ -8,4 +8,4 @@ https://www.geeksforgeeks.org/socket-programming-cc/
 https://dev.to/sanjayrv/a-beginners-guide-to-socket-programming-in-c-5an5
 
 ## Week 2 : Socket Programming 2
-Build a Chat application with single and multiple clients
+Build a Chat application with single and multiple clients.
