@@ -13,3 +13,4 @@ Single Client : <br />
 https://www.geeksforgeeks.org/tcp-server-client-implementation-in-c/ <br />
 Multi Client : <br />
 https://medium.com/@securosoft/simple-chat-server-using-sockets-in-c-f72fc8b5b24e <br />
+https://www.geeksforgeeks.org/socket-programming-in-cc-handling-multiple-clients-on-server-without-multi-threading/?ref=rp <br />
