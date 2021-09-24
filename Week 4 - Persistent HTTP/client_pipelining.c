@@ -13,6 +13,7 @@
 #include<sys/socket.h>
 #include<netinet/in.h>
 #include<arpa/inet.h>
+#include<pthread.h>
 
 #define PORT 3503
 #define MAX 1024
@@ -44,6 +45,16 @@ struct Response{
     struct Student responseBody;
 };
 
+void *getResponses(void *sockfd){
+    int clientSocket = *((int *)sockfd);
+    struct Response response;
+    read(clientSocket, &response, sizeof(response));
+    printf("\n%s%s%s\n", response.statusLine, response.responseHeaders, response.responseTime );
+    struct Student reqStudent = response.responseBody;
+    printf("------------------------\nStudent details : \n------------------------\nName : %s\nReg. No : %ld\nDept : %s - %c batch\nSemester : %d\n------------------------\n%s - %d/10\n%s - %d/10\n%s - %d/10\n%s - %d/10\n%s - %d/10\n------------------------\nDate - time: %s------------------------\n", reqStudent.name, reqStudent.regNum, reqStudent.dept, reqStudent.batch, reqStudent.sem, reqStudent.subjects[0].name, reqStudent.subjects[0].grade, reqStudent.subjects[1].name, reqStudent.subjects[1].grade, reqStudent.subjects[2].name, reqStudent.subjects[2].grade, reqStudent.subjects[3].name, reqStudent.subjects[3].grade, reqStudent.subjects[4].name, reqStudent.subjects[4].grade, response.responseTime);
+    return NULL;
+}
+
 int main(){
     int clientSocket;
     struct sockaddr_in serverAddr;
@@ -67,10 +78,11 @@ int main(){
     long rollNum;
     int sem;
     int semesters[4] = {1, 2, 3, 4};
-    struct Student reqStudent;
-    
+        
     printf("Enter roll number : ");
     scanf("%ld", &rollNum);
+
+    pthread_t responseThreads[4];
 
     sem = semesters[0];
     struct Request request;
@@ -78,46 +90,32 @@ int main(){
     sprintf(request.requestHeaders, "Host: localhost\nUser-Agent: Ubuntu/20.4\nAccept: text/html\nAccept-Language: en-US\nConnection: close\n\n");
     sprintf(request.requestBody, "%ld,%d", rollNum, sem);
     write(clientSocket, &request, sizeof(request));
+    pthread_create(&responseThreads[sem-1], NULL, getResponses, (void *)&clientSocket);
 
     sem = semesters[1];    
     sprintf(request.requestLine, "GET /%ld/%d HTTP/1.1\n", rollNum, sem);
     sprintf(request.requestHeaders, "Host: localhost\nUser-Agent: Ubuntu/20.4\nAccept: text/html\nAccept-Language: en-US\nConnection: close\n\n");
     sprintf(request.requestBody, "%ld,%d", rollNum, sem);    
     write(clientSocket, &request, sizeof(request));
+    pthread_create(&responseThreads[sem-1], NULL, getResponses, (void *)&clientSocket);
     
     sem = semesters[2];    
     sprintf(request.requestLine, "GET /%ld/%d HTTP/1.1\n", rollNum, sem);
     sprintf(request.requestHeaders, "Host: localhost\nUser-Agent: Ubuntu/20.4\nAccept: text/html\nAccept-Language: en-US\nConnection: close\n\n");
     sprintf(request.requestBody, "%ld,%d", rollNum, sem);    
     write(clientSocket, &request, sizeof(request));
+    pthread_create(&responseThreads[sem-1], NULL, getResponses, (void *)&clientSocket);
 
     sem = semesters[3];
     sprintf(request.requestLine, "GET /%ld/%d HTTP/1.1\n", rollNum, sem);
     sprintf(request.requestHeaders, "Host: localhost\nUser-Agent: Ubuntu/20.4\nAccept: text/html\nAccept-Language: en-US\nConnection: close\n\n");
     sprintf(request.requestBody, "%ld,%d", rollNum, sem);
     write(clientSocket, &request, sizeof(request));
+    pthread_create(&responseThreads[sem-1], NULL, getResponses, (void *)&clientSocket);
     
-    struct Response response;
-    read(clientSocket, &response, sizeof(response));
-    printf("\n%s%s%s\n", response.statusLine, response.responseHeaders, response.responseTime );
-    reqStudent = response.responseBody;
-    printf("------------------------\nStudent details : \n------------------------\nName : %s\nReg. No : %ld\nDept : %s - %c batch\nSemester : %d\n------------------------\n%s - %d/10\n%s - %d/10\n%s - %d/10\n%s - %d/10\n%s - %d/10\n------------------------\nDate - time: %s------------------------\n", reqStudent.name, reqStudent.regNum, reqStudent.dept, reqStudent.batch, reqStudent.sem, reqStudent.subjects[0].name, reqStudent.subjects[0].grade, reqStudent.subjects[1].name, reqStudent.subjects[1].grade, reqStudent.subjects[2].name, reqStudent.subjects[2].grade, reqStudent.subjects[3].name, reqStudent.subjects[3].grade, reqStudent.subjects[4].name, reqStudent.subjects[4].grade, response.responseTime);
-    
-    read(clientSocket, &response, sizeof(response));
-    printf("\n%s%s%s\n", response.statusLine, response.responseHeaders, response.responseTime );
-    reqStudent = response.responseBody;
-    printf("------------------------\nStudent details : \n------------------------\nName : %s\nReg. No : %ld\nDept : %s - %c batch\nSemester : %d\n------------------------\n%s - %d/10\n%s - %d/10\n%s - %d/10\n%s - %d/10\n%s - %d/10\n------------------------\nDate - time: %s------------------------\n", reqStudent.name, reqStudent.regNum, reqStudent.dept, reqStudent.batch, reqStudent.sem, reqStudent.subjects[0].name, reqStudent.subjects[0].grade, reqStudent.subjects[1].name, reqStudent.subjects[1].grade, reqStudent.subjects[2].name, reqStudent.subjects[2].grade, reqStudent.subjects[3].name, reqStudent.subjects[3].grade, reqStudent.subjects[4].name, reqStudent.subjects[4].grade, response.responseTime);
-         
-    read(clientSocket, &response, sizeof(response));
-    printf("\n%s%s%s\n", response.statusLine, response.responseHeaders, response.responseTime );
-    reqStudent = response.responseBody;
-    printf("------------------------\nStudent details : \n------------------------\nName : %s\nReg. No : %ld\nDept : %s - %c batch\nSemester : %d\n------------------------\n%s - %d/10\n%s - %d/10\n%s - %d/10\n%s - %d/10\n%s - %d/10\n------------------------\nDate - time: %s------------------------\n", reqStudent.name, reqStudent.regNum, reqStudent.dept, reqStudent.batch, reqStudent.sem, reqStudent.subjects[0].name, reqStudent.subjects[0].grade, reqStudent.subjects[1].name, reqStudent.subjects[1].grade, reqStudent.subjects[2].name, reqStudent.subjects[2].grade, reqStudent.subjects[3].name, reqStudent.subjects[3].grade, reqStudent.subjects[4].name, reqStudent.subjects[4].grade, response.responseTime);
-    
-    read(clientSocket, &response, sizeof(response));
-    printf("\n%s%s%s\n", response.statusLine, response.responseHeaders, response.responseTime );
-    reqStudent = response.responseBody;
-    printf("------------------------\nStudent details : \n------------------------\nName : %s\nReg. No : %ld\nDept : %s - %c batch\nSemester : %d\n------------------------\n%s - %d/10\n%s - %d/10\n%s - %d/10\n%s - %d/10\n%s - %d/10\n------------------------\nDate - time: %s------------------------\n", reqStudent.name, reqStudent.regNum, reqStudent.dept, reqStudent.batch, reqStudent.sem, reqStudent.subjects[0].name, reqStudent.subjects[0].grade, reqStudent.subjects[1].name, reqStudent.subjects[1].grade, reqStudent.subjects[2].name, reqStudent.subjects[2].grade, reqStudent.subjects[3].name, reqStudent.subjects[3].grade, reqStudent.subjects[4].name, reqStudent.subjects[4].grade, response.responseTime);
-    
+    for(int i = 0; i < 4; i++)
+        pthread_join(responseThreads[i], NULL);
+
     sprintf(request.requestLine, "EXIT");
     write(clientSocket, &request, sizeof(request));
     
