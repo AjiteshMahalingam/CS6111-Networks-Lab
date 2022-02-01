@@ -1,0 +1,5 @@
+www.google.com 67.74.45.135
+mail.google.com 45.16.75.24
+drive.google.com 56.98.23.123
+meet.google.com 31.123.56.190
+colab.google.com 94.50.187.120

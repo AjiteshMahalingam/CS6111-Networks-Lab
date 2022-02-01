@@ -1,0 +1,5 @@
+yahoo.com 15.16.143.251
+twitter.com 75.67.34.14
+google.com 10.14.56.123
+facebook.com 21.73.41.142
+netflix.com 32.64.124.35

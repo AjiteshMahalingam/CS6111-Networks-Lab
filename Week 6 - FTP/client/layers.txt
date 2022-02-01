@@ -1,0 +1,9 @@
+The ISO-OSI model is a seven layer architecture. It defines seven layers or levels in a complete communication system. They are:
+1.    Application Layer
+2.    Presentation Layer
+3.    Session Layer
+4.    Transport Layer
+5.    Network Layer
+6.    Datalink Layer
+7.    Physical Layer
+ÿ
